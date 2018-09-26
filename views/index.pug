@@ -1,0 +1,16 @@
+doctype html
+
+html
+  head
+    meta(charset='utf-8')
+    title Todo list
+
+  body
+    h1 Don't quit, just do it.
+
+    form(method='post' action='todo/add')
+      label(for='todo') Add a todo :
+      input(type='text' id='todo')
+      input(type='submit')
+
+    ul 

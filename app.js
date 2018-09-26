@@ -7,19 +7,23 @@ const bodyParser = require('body-parser');
 /* Use session middleware */
 app.use(cookieSession({ secret: 'secretkey' }));
 
+
 /* Use pug as template engine */
 app.set('view engine', 'pug');
+
 
 /* Create application/x-www-form-urlencoded parser */
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 
-app.get('/', (req, res) => {
+/* Create todolist if dealing with new session,
+   render index.pug with todolist as local variable in both cases */
+app.get('/todo', (req, res) => {
   if (!req.session.todolist) {
-    req.session.todolist = {};
+    req.session.todolist = [];
   }
 
-  res.render('index');
+  res.render('index', { todolist: req.session.todolist });
 });
 
 

@@ -51,12 +51,11 @@ app.get('/todo/delete/:id', (req, res) => {
 app.route('/todo/modify/:id')
 
   // Render index with the todo-to-be-modified index as 'todoToModify'
-  .get((req, res, next) => {
+  .get((req, res) => {
     res.render('index', {
       todolist: req.session.todolist,
       todoToModify: req.params.id,
     });
-    next();
   })
 
   // Modify the todo

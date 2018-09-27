@@ -16,7 +16,7 @@ const urlencodedParser = express.urlencoded({ extended: false });
 app.use(cookieSession({ secret: 'secretkey' }));
 
 
-// Create todolist array if dealing with new session
+// Create a todolist array if dealing with new session
 app.use((req, res, next) => {
   if (!req.session.todolist) {
     req.session.todolist = [];
@@ -25,13 +25,13 @@ app.use((req, res, next) => {
 });
 
 
-// Render index view with todolist as local variable
+// Render index(.pug) view with todolist as local variable
 app.get('/todo', (req, res) => {
   res.render('index', { todolist: req.session.todolist });
 });
 
 
-// Add a todo to list
+// Add a todo to the list
 app.post('/todo/add', urlencodedParser, (req, res) => {
   if (!req.body) return res.sendStatus(400);
 
@@ -45,6 +45,27 @@ app.get('/todo/delete/:id', (req, res) => {
   req.session.todolist.splice(req.params.id, 1);
   res.redirect('/todo');
 });
+
+
+// Modify a todo
+app.route('/todo/modify/:id')
+
+  // Render index with the todo-to-be-modified index as 'todoToModify'
+  .get((req, res, next) => {
+    res.render('index', {
+      todolist: req.session.todolist,
+      todoToModify: req.params.id,
+    });
+    next();
+  })
+
+  // Modify the todo
+  .post(urlencodedParser, (req, res) => {
+    if (!req.body) return res.sendStatus(400);
+
+    req.session.todolist[req.params.id] = req.body.modify_todo;
+    res.redirect('/todo');
+  });
 
 
 // Redirect user to home page if requested url does not exist

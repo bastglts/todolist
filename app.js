@@ -1,21 +1,22 @@
-/* Require useful modules */
-const app = require('express')();
+// Require useful modules
+const express = require('express');
+const app = express();
 const cookieSession = require('cookie-session');
-const bodyParser = require('body-parser');
 
-/* Use pug as template engine */
+
+// Use pug as template engine
 app.set('view engine', 'pug');
 
-/* Create application/x-www-form-urlencoded parser */
-const urlencodedParser = bodyParser.urlencoded({ extended: false });
+
+// Create application/x-www-form-urlencoded parser
+const urlencodedParser = express.urlencoded({ extended: false });
 
 
-/* Use session middleware */
+// Use session middleware
 app.use(cookieSession({ secret: 'secretkey' }));
 
 
-/* Create todolist array if dealing with new session
-   (middleware executed every time the app receive a request) */
+// Create todolist array if dealing with new session
 app.use((req, res, next) => {
   if (!req.session.todolist) {
     req.session.todolist = [];
@@ -24,17 +25,18 @@ app.use((req, res, next) => {
 });
 
 
-/* Render index.pug with todolist as local variable */
+// Render index.pug with todolist as local variable
 app.get('/todo', (req, res) => {
   res.render('index', { todolist: req.session.todolist });
 });
 
 
-/* Add a todo to list */
+// Add a todo to list
 app.post('/todo/add', urlencodedParser, (req, res) => {
   if (!req.body) return res.sendStatus(400);
 
   res.send('response :' + req.body.todo);
+  res.redirect('/todo');
 });
 
 

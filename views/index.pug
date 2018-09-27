@@ -25,5 +25,6 @@ html
           - if (todoToModify == index)
             form(method='post' action=`/todo/modify/${index}`)
               label(for='modify-todo') Modify todo : 
-              input(type='text' id='modify-todo' name='modify_todo')
+              input(type='text' id='modify-todo'
+                name='modify_todo' value=`${todo}`)
               input(type='submit')

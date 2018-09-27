@@ -4,7 +4,7 @@ const app = express();
 const cookieSession = require('cookie-session');
 
 
-// Use pug as template engine
+// Set pug as template engine
 app.set('view engine', 'pug');
 
 
@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 });
 
 
-// Render index.pug with todolist as local variable
+// Render index view with todolist as local variable
 app.get('/todo', (req, res) => {
   res.render('index', { todolist: req.session.todolist });
 });
@@ -35,9 +35,12 @@ app.get('/todo', (req, res) => {
 app.post('/todo/add', urlencodedParser, (req, res) => {
   if (!req.body) return res.sendStatus(400);
 
-  res.send('response :' + req.body.todo);
+  req.session.todolist.push(req.body.todo);
   res.redirect('/todo');
 });
 
+
+// Redirect user to home page if requested url does not exist
+app.use((req, res) => res.redirect('/todo'));
 
 app.listen(8080, () => console.log(`App listening on port 8080!`));

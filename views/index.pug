@@ -13,18 +13,17 @@ html
       label(for='todo') Add a todo : 
       input(type='text' id='todo' name='todo')
       input(type='submit')
-
+      
     ul
       each todo, index in todolist
         li
           | #[a(href=`/todo/delete/${index}`) ⚔]
-          | #[a(href=`/todo/modify/${index}`) ✎]
-          | #{todo}
           |
-          //- Display 'modify-form' only when necessary
+          | #[a(href=`/todo/modify/${index}`) ✎]
+          |
           - if (todoToModify == index)
             form(method='post' action=`/todo/modify/${index}`)
-              label(for='modify-todo') Modify todo : 
-              input(type='text' id='modify-todo'
-                name='modify_todo' value=`${todo}`)
+              input(type='text' name='modify_todo' value=`${todo}`)
               input(type='submit')
+          - else
+            | #{todo}

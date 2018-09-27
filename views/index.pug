@@ -4,6 +4,7 @@ html
   head
     meta(charset='utf-8')
     title Todo list
+    style a {text-decoration: none; color: black;}
 
   body
     h1 Here's your todo list
@@ -14,5 +15,5 @@ html
       input(type='submit')
 
     ul
-      each todo in todolist
-        li= todo
+      each todo, index in todolist
+        li #[a(href=`/todo/delete/${index}`) ⚔] #{todo}

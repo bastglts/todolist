@@ -40,7 +40,16 @@ app.post('/todo/add', urlencodedParser, (req, res) => {
 });
 
 
+// Delete a todo from the list
+app.get('/todo/delete/:id', (req, res) => {
+  req.session.todolist.splice(req.params.id, 1);
+  res.redirect('/todo');
+});
+
+
 // Redirect user to home page if requested url does not exist
 app.use((req, res) => res.redirect('/todo'));
 
+
+// Listen to port 8080
 app.listen(8080, () => console.log(`App listening on port 8080!`));

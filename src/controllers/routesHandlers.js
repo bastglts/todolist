@@ -1,34 +1,70 @@
 'use strict';
 
-/* Require data module */
-const data = require('../models/data.js');
+/* ------- Require mongoose's Todo model ------- */
+
+const Todo = require('../models/TodoModel.js');
 
 
-/* Route handlers */
+/* -------------- Route handlers --------------- */
+
 module.exports = {
-  // Render index.pug with todolist and/or indexOfTodoToModify
+
+  /* Render index.pug with todolist and indexOfTodoToModify */
   renderIndex: (req, res) => {
-    res.render('index', {
-      todolist: data,
-      indexOfTodoToModify: req.params.todoId,
-    });
+    // Retrieve all todos form the database
+    Todo.find()
+      .then(todos => {
+        // Render view
+        res.render('index', {
+          todolist: todos,
+          indexOfTodoToModify: req.params.todoId,
+        });
+      });
   },
 
-  // Add todo to the model
+
+  /* Add todo to the database */
   addTodo: (req, res) => {
-    data.push({ item: req.body.todo });
-    res.redirect('/todo');
+    // Create a todo
+    const todo = new Todo({
+      item: req.body.todo,
+    });
+
+    // Save todo to database
+    todo.save()
+      .then(todo => {
+        console.log('todo saved');
+
+        // Redirect to home page
+        res.redirect('/todo');
+      });
   },
 
-  // Delete todo from the model with :todoId
+
+  /* Delete todo from the model with :todoId */
   deleteTodo: (req, res) => {
-    data.splice(req.params.todoId, 1);
-    res.redirect('/todo');
+    Todo.findByIdAndDelete(req.params.todoId)
+      .then(todo => {
+        console.log('todo deleted');
+
+        // Redirect to home page
+        res.redirect('/todo');
+      });
   },
 
-  // Modify todo with :todoId
+
+  /* Modify todo with :todoId */
   modifyTodo: (req, res) => {
-    data[req.params.todoId] = { item: req.body.modify_todo };
-    res.redirect('/todo');
+    Todo.findOneAndUpdate(
+      { _id: req.params.todoId },
+      { item: req.body.modifiedTodo }
+    )
+      .then(todo => {
+        console.log('todo modified');
+
+        // Redirect to home page
+        res.redirect('/todo');
+      });
   },
+
 };

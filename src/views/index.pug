@@ -15,15 +15,15 @@ html
       input(type='submit')
       
     ul
-      each todo, index in todolist
+      each todo in todolist
         li
-          | #[a(href=`/todo/${index}`) ⚔]
+          | #[a(href=`/todo/${todo._id}`) ⚔]
           |
-          | #[a(href=`/todo/modify/${index}`) ✎]
+          | #[a(href=`/todo/modify/${todo._id}`) ✎]
           |
-          - if (indexOfTodoToModify == index)
-            form(method='post' action=`/todo/modify/${index}`)
-              input(type='text' name='modify_todo' value=`${todo.item}`)
+          - if (indexOfTodoToModify === todo._id.toString())
+            form(method='post' action=`/todo/modify/${todo._id}`)
+              input(type='text' name='modifiedTodo' value=`${todo.item}`)
               input(type='submit')
           - else
             | #{todo.item}

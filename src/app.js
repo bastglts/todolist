@@ -14,9 +14,19 @@ const app = express();
 const serverConfig = require('../config/serverConfig.js');
 serverConfig(app, express);
 
-// Configure & connect to the database
+// Configure the database
 const dbConfig = require('../config/dbConfig.js');
-dbConfig(mongoose);
+
+mongoose.set('useFindAndModify', false);
+
+// Connect to the database
+mongoose.connect(dbConfig.url, { useNewUrlParser: true })
+  .then(() => {
+    console.log('Successfully connected to the database');
+  }).catch(err => {
+    console.log('Could not connect to the database. Exiting now...', err);
+    process.exit();
+  });
 
 
 /* ------ Fire up routing ------- */

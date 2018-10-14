@@ -1,19 +1,15 @@
-module.exports = (mongoose) => {
-  // Configure
-  const dbUrl = 'mongodb+srv://bast:pwd123@cluster0-9wb08.gcp.mongodb.net/' +
-  'Todo?retryWrites=true';
+'use strict';
 
-  mongoose.Promise = global.Promise;
+require('dotenv').config();
 
-  mongoose.set('useFindAndModify', false);
+const {
+  DB_USER,
+  DB_PASS,
+  DB_HOST,
+  DB_COLLECTION
+} = process.env;
 
 
-  // Connect to the database
-  mongoose.connect(dbUrl, { useNewUrlParser: true })
-    .then(() => {
-      console.log('Successfully connected to the database');
-    }).catch(err => {
-      console.log('Could not connect to the database. Exiting now...', err);
-      process.exit();
-    });
+module.exports = {
+  url: 'mongodb+srv://DB_USER:DB_PASS@DB_HOST/B_COLLECTION?retryWrites=true',
 };

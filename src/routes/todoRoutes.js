@@ -1,27 +1,31 @@
 'use strict';
 
-module.exports = (app) => {
-  // Require route handlers (controller) module
-  const routesHandlers = require('../controllers/routesHandlers.js');
+/* -------- Create Router -------- */
+const router = require('express').Router();
 
 
-  // Render index(.pug) view with todolist (i.e. all todos)
-  app.get('/todo', routesHandlers.renderIndex);
+/* --------- Dependency ---------- */
+const routesHandlers = require('../controllers/routesHandlers.js');
 
 
-  // Add a todo to the list
-  app.post('/todo', routesHandlers.addTodo);
+/* -------- Todo routes ---------- */
+
+// Render index(.pug) view with todolist (i.e. all todos)
+router.get('/', routesHandlers.renderIndex);
+
+// Add a todo to the list
+router.post('/', routesHandlers.addTodo);
+
+// Delete a todo from the list with todoId
+router.get('/:todoId', routesHandlers.deleteTodo);
+
+// Modify a todo
+router.route('/modify/:todoId')
+  // Render index(.pug) with todoId (display "modify-form")
+  .get(routesHandlers.renderIndex)
+
+  // Modify the todo
+  .post(routesHandlers.modifyTodo);
 
 
-  // Delete a todo from the list with todoId
-  app.get('/todo/:todoId', routesHandlers.deleteTodo);
-
-
-  // Modify a todo
-  app.route('/todo/modify/:todoId')
-    // Render index(.pug) with todoId (display "modify-form")
-    .get(routesHandlers.renderIndex)
-
-    // Modify the todo
-    .post(routesHandlers.modifyTodo);
-};
+module.exports = router;

@@ -10,16 +10,18 @@ const app = express();
 
 
 /* ------- Configuration -------- */
-// Configure express & app
-const serverConfig = require('../config/serverConfig.js');
-serverConfig(app, express);
 
-// Configure the database
+// Template engine & views directory
+app.set('views', 'src/views');
+app.set('view engine', 'pug');
+
+// Urlencoded body-parser
+app.use(express.urlencoded({ extended: false }));
+
+// Configure & connect to the database
 const dbConfig = require('../config/dbConfig.js');
-
 mongoose.set('useFindAndModify', false);
 
-// Connect to the database
 mongoose.connect(dbConfig.url, { useNewUrlParser: true })
   .then(() => {
     console.log('Successfully connected to the database');
@@ -30,8 +32,7 @@ mongoose.connect(dbConfig.url, { useNewUrlParser: true })
 
 
 /* ------ Fire up routing ------- */
-const todoRoutes = require('./routes/todoRoutes.js');
-todoRoutes(app);
+app.use('/todo', require('./routes/todoRoutes.js'));
 
 
 /* ---- Listen for requests ----- */

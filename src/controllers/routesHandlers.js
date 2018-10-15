@@ -1,12 +1,10 @@
 'use strict';
 
 /* ------- Require mongoose's Todo model ------- */
-
 const Todo = require('../models/TodoModel.js');
 
 
 /* -------------- Route handlers --------------- */
-
 module.exports = {
 
   /* Render index.pug with todolist and indexOfTodoToModify */
